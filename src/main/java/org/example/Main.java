@@ -13,7 +13,7 @@ public class Main {
 
         Runnable task = new threadTask(smartWatch);
         Thread batteryThread = new Thread(task);
-        batteryThread.start();
+        batteryThread.start();//스레드 시작
 
         System.out.println("여러 시계의 기능을 체험 해볼 수 있는 시간입니다");
         System.out.println("------------------------------------");
@@ -29,7 +29,7 @@ public class Main {
                     break;
                 case 2:
                     System.out.println("해 시계의 기능 입니다.");
-                    watch2.showTime();
+                    watch2.showTime();//부모 타입으로 참조했지만 자식 메서드가 실행(다형성)
                     break;
                 case 3:
                     System.out.println("디지털 시게의 기능들입니다. 체험해보고 싶은 기능을 선택해주세요");
@@ -39,7 +39,7 @@ public class Main {
                     switch (choice2) {
                         case 1:
                             System.out.println("전자식 시간이 표시됩니다.");
-                            watch3.showTime();
+                            watch3.showTime();//부모 타입으로 참조했지만 자식 메서드가 실행(다형성)
                             break;
                         case 2:
                             System.out.println("년,월,일이 표시됩니다.");
