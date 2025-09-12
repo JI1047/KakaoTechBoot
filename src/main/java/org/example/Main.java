@@ -76,7 +76,7 @@ public class Main {
                     }
 
                 case 5:
-                    batteryThread.interrupt();
+                    batteryThread.interrupt();//스레드에 중단요청을 보냄
                     System.out.println("프로그램을 종료합니다. 감사합니다");
                     return;
             }

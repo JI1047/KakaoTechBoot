@@ -6,7 +6,7 @@ package org.example;
 public class SunWatch extends Watch {
 
     boolean isDay = false;//낮,밤을 구별하기 위한 boolean형 변수(true: 낮,false: 밤)
-    //enum으로 하는것도 좋지 않을까?
+
 
 
     //Watch 부모클래스의 메서드 오버라이드(재정의)

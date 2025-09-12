@@ -1,8 +1,9 @@
 package org.example;
 
+//스마트워치의 배터리가 10초마다 10프로씩 줄어드는 스레드 구현
 public class threadTask implements Runnable{
 
-    SmartWatch smartWatch;
+    private final SmartWatch smartWatch;
     public threadTask(SmartWatch smartWatch){
         this.smartWatch = smartWatch;
     }
