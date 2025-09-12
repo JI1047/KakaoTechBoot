@@ -11,6 +11,10 @@ public class Main {
         DigitalWatch digitalWatch = new DigitalWatch();
         SmartWatch smartWatch = new SmartWatch();
 
+        Runnable task = new threadTask(smartWatch);
+        Thread batteryThread = new Thread(task);
+        batteryThread.start();
+
         System.out.println("여러 시계의 기능을 체험 해볼 수 있는 시간입니다");
         System.out.println("------------------------------------");
         while(true){
@@ -61,12 +65,10 @@ public class Main {
                             case 1:
                                 System.out.println("걸음 수 측정을 시작합니다!");
                                 smartWatch.getWalkCount();
-                                smartWatch.batteryUse();
                                 break;
                             case 2:
                                 System.out.println("메시지 기능이 시작됩니다.");
                                 smartWatch.sendMessage();
-                                smartWatch.batteryUse();
                                 break;
 
                         }
@@ -74,6 +76,7 @@ public class Main {
                     }
 
                 case 5:
+                    batteryThread.interrupt();
                     System.out.println("프로그램을 종료합니다. 감사합니다");
                     return;
             }

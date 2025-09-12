@@ -58,9 +58,9 @@ public class SmartWatch extends SunWatch{
     }
 
 
-    //스마트워치 기능을 이용할 때마다 배터리가 닳는 메서드
+    //스레드 구현을 위해 5초마다 스마트워치의 배터리가 10씩 닳도록 구현
     public void batteryUse(){
-        battery-=30;
+        battery-=10;
     }
 
     //배터리 사용량 출력 메서드
