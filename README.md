@@ -1,3 +1,0 @@
-﻿# KakaoTechBoot
- 1주차 과제 CLI 프로그래밍 
-
