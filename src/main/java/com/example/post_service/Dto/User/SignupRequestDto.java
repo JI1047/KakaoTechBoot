@@ -1,4 +1,4 @@
-package com.example.post_service.Dto;
+package com.example.post_service.Dto.User;
 
 import lombok.Getter;
 

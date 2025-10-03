@@ -1,7 +1,7 @@
 package com.example.post_service.Mapper;
 
-import com.example.post_service.Dto.SignupRequestDto;
-import com.example.post_service.Dto.SignupResponseDto;
+import com.example.post_service.Dto.User.SignupRequestDto;
+import com.example.post_service.Dto.User.SignupResponseDto;
 import com.example.post_service.Entity.BaseTime;
 import com.example.post_service.Entity.user.UserBasic;
 import com.example.post_service.Entity.user.UserExtra;
