@@ -3,6 +3,7 @@ package com.example.post_service.Service;
 import com.example.post_service.Dto.User.LoginRequestDto;
 import com.example.post_service.Dto.User.SignupRequestDto;
 import com.example.post_service.Dto.User.SignupResponseDto;
+import com.example.post_service.Dto.User.UserResponseDto;
 import com.example.post_service.Entity.user.UserBasic;
 import com.example.post_service.Entity.user.UserExtra;
 import com.example.post_service.Mapper.UserMapper;
@@ -72,5 +73,18 @@ public class UserService {
 
         return ResponseEntity.ok("로그인 성공!");
 
+    }
+
+    //회원 정보 조회 Service 로직
+    public ResponseEntity<UserResponseDto> getUser(Long UserId){
+        UserBasic userBasic = userBasicRepository.findById(UserId).orElse(null);
+
+        if (userBasic==null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        UserResponseDto dto = userMapper.toUserResponseDto(userBasic);
+
+        return ResponseEntity.ok(dto);
     }
 }

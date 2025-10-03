@@ -27,8 +27,5 @@ public class UserExtra {
 
 
     protected UserExtra() {}
-    public UserExtra(String nickname, String profileImage) {
-        this.nickname = nickname;
-        this.profileImage = profileImage;
-    }
+
 }

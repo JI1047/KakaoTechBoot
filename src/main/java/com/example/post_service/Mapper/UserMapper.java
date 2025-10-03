@@ -2,6 +2,7 @@ package com.example.post_service.Mapper;
 
 import com.example.post_service.Dto.User.SignupRequestDto;
 import com.example.post_service.Dto.User.SignupResponseDto;
+import com.example.post_service.Dto.User.UserResponseDto;
 import com.example.post_service.Entity.BaseTime;
 import com.example.post_service.Entity.user.UserBasic;
 import com.example.post_service.Entity.user.UserExtra;
@@ -32,6 +33,16 @@ public class UserMapper {
                 .nickname(userBasic.getUser().getNickname())
                 .profileImage(userBasic.getUser().getProfileImage())
                 .email(userBasic.getEmail())
+                .build();
+    }
+
+    public UserResponseDto toUserResponseDto(UserBasic userBasic) {
+        return UserResponseDto.builder()
+                .email(userBasic.getEmail())
+                .nickname(userBasic.getUser().getNickname())
+                .profileImage(userBasic.getUser().getProfileImage())
+                .createdAt(userBasic.getBaseTime().getCreatedAt())
+                .updatedAt(userBasic.getBaseTime().getUpdatedAt())
                 .build();
     }
 }

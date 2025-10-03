@@ -3,6 +3,7 @@ package com.example.post_service.Controller;
 import com.example.post_service.Dto.User.LoginRequestDto;
 import com.example.post_service.Dto.User.SignupRequestDto;
 import com.example.post_service.Dto.User.SignupResponseDto;
+import com.example.post_service.Dto.User.UserResponseDto;
 import com.example.post_service.Entity.user.UserBasic;
 import com.example.post_service.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,9 @@ public class UserController {
 
     }
 
-//    @GetMapping("{userId}")
-//    public ResponseEntity<UserResponseDto> getUser(@RequestParam UserBasic userBasic) {
-//
-//    }
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserResponseDto> getUser(@PathVariable Long userId) {
+        return userService.getUser(userId);
+
+    }
 }
