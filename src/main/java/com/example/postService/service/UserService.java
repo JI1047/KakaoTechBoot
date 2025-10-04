@@ -2,6 +2,7 @@ package com.example.postService.service;
 
 import com.example.postService.dto.login.request.LoginRequestDto;
 import com.example.postService.dto.user.request.CreateUserRequestDto;
+import com.example.postService.dto.user.request.UpdateUserPasswordRequestDto;
 import com.example.postService.dto.user.request.UpdateUserProfileRequestDto;
 import com.example.postService.dto.user.response.CreateUserResponseDto;
 import com.example.postService.dto.user.response.GetUserResponseDto;
@@ -21,4 +22,6 @@ public interface UserService {
 
     //닉네임,프로필 이미지 수정 Service 로직
     ResponseEntity<String> updateProfile(UpdateUserProfileRequestDto dto, Long UserId);
+
+    ResponseEntity<String> updatePassword(UpdateUserPasswordRequestDto dto, Long userId);
 }

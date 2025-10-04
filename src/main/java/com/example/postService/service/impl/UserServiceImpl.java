@@ -2,6 +2,7 @@ package com.example.postService.service.impl;
 
 import com.example.postService.dto.login.request.LoginRequestDto;
 import com.example.postService.dto.user.request.CreateUserRequestDto;
+import com.example.postService.dto.user.request.UpdateUserPasswordRequestDto;
 import com.example.postService.dto.user.request.UpdateUserProfileRequestDto;
 import com.example.postService.dto.user.response.CreateUserResponseDto;
 import com.example.postService.dto.user.response.GetUserResponseDto;
@@ -41,8 +42,8 @@ public class UserServiceImpl implements UserService {
 //        String encodedPassword = passwordEncoder.encode(dto.getPassword());
 
 
-        UserProfile UserProfile = userMapper.toUserExtra(dto);
-        User User = userMapper.toUserBasic(dto, UserProfile);
+        UserProfile UserProfile = userMapper.toUserProfile(dto);
+        User User = userMapper.toUser(dto, UserProfile);
 
         userJpaRepository.save(User);
 
@@ -86,9 +87,9 @@ public class UserServiceImpl implements UserService {
     //닉네임,프로필 이미지 수정 Service 로직
     @Override
     @Transactional
-    public ResponseEntity<String> updateProfile(UpdateUserProfileRequestDto dto, Long UserId) {
+    public ResponseEntity<String> updateProfile(UpdateUserProfileRequestDto dto, Long userId) {
 
-        Optional<UserProfile> userProfileOptional = userProfileJpaRepository.findById(UserId);
+        Optional<UserProfile> userProfileOptional = userProfileJpaRepository.findById(userId);
 
         if (userProfileOptional.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -97,5 +98,26 @@ public class UserServiceImpl implements UserService {
         userProfileOptional.get().updateProfile(dto.getNickname(), dto.getProfileImage());
 
         return ResponseEntity.ok("닉네임,프로필 이미지 수정 성공!");
+    }
+
+    @Override
+    public ResponseEntity<String> updatePassword(UpdateUserPasswordRequestDto dto, Long userId) {
+
+        if (!dto.getNewPassword().equals(dto.getConfirmPassword())) {
+            return ResponseEntity.badRequest()
+                    .body("비밀번호와 비밀번호 확인히 일치하지 않습니다.");
+        }
+
+        Optional<User> userOptional = userJpaRepository.findById(userId);
+
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        userOptional.get().updatePassword(dto.getNewPassword());
+
+        return ResponseEntity.ok("비밀번호 변경 성공");
+
+
     }
 }

@@ -1,5 +1,6 @@
 package com.example.postService.controller;
 
+import com.example.postService.dto.user.request.UpdateUserPasswordRequestDto;
 import com.example.postService.service.UserService;
 import com.example.postService.dto.login.request.LoginRequestDto;
 import com.example.postService.dto.user.request.CreateUserRequestDto;
@@ -41,5 +42,10 @@ public class UserController {
     public ResponseEntity<String> updateProfile(@RequestBody UpdateUserProfileRequestDto dto, @PathVariable Long userId) {
 
         return userService.updateProfile(dto, userId);
+    }
+
+    @PatchMapping("/{userId}/password")
+    public ResponseEntity<String> updatePassword(@RequestBody UpdateUserPasswordRequestDto dto, @PathVariable Long userId) {
+        return userService.updatePassword(dto, userId);
     }
 }

@@ -11,19 +11,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserMapper {
 
-    public UserProfile toUserExtra(CreateUserRequestDto dto) {
+    public UserProfile toUserProfile(CreateUserRequestDto dto) {
         return UserProfile.builder()
                 .nickname(dto.getNickname())
                 .profileImage(dto.getProfileImage())
                 .build();
     }
 
-    public User toUserBasic(CreateUserRequestDto dto, UserProfile UserProfile) {
+    public User toUser(CreateUserRequestDto dto, UserProfile UserProfile) {
         return User.builder()
-                .user(UserProfile)
+                .userProfile(UserProfile)
                 .email(dto.getEmail())
                 .password(dto.getPassword())
-                .baseTime(new BaseTime())
                 .isDeleted(false)
                 .build();
     }
@@ -41,8 +40,6 @@ public class UserMapper {
                 .email(User.getEmail())
                 .nickname(User.getUserProfile().getNickname())
                 .profileImage(User.getUserProfile().getProfileImage())
-                .createdAt(User.getBaseTime().getCreatedAt())
-                .updatedAt(User.getBaseTime().getUpdatedAt())
                 .build();
     }
 }

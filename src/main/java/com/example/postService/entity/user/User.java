@@ -43,6 +43,10 @@ public class User extends BaseTime {
 
 
 
+    public void updatePassword(String password) {
+        this.confirmPassword = password;
+    }
+
 
 }
 //사용자의 닉네임 or 프로필 이미지를 통해서 이메일이나,패스워드를 조회하는 일은 거의 없기 때문에 단방향으로 설정함
