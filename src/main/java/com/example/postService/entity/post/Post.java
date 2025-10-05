@@ -3,13 +3,19 @@ package com.example.postService.entity.post;
 import com.example.postService.entity.BaseTime;
 import com.example.postService.entity.user.UserProfile;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "post")
 @EntityListeners(AuditingEntityListener.class)
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
+@Builder
 public class Post extends BaseTime {
     @Id
     private Long postId;
@@ -32,5 +38,4 @@ public class Post extends BaseTime {
 
     private String postImage;
 
-    protected Post() {}
 }

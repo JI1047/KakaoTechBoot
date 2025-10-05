@@ -1,4 +1,4 @@
-package com.example.postService.repository;
+package com.example.postService.repository.user;
 
 import com.example.postService.entity.user.UserProfile;
 import org.springframework.data.jpa.repository.JpaRepository;

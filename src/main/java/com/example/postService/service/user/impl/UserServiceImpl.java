@@ -1,4 +1,4 @@
-package com.example.postService.service.impl;
+package com.example.postService.service.user.impl;
 
 import com.example.postService.dto.login.request.LoginRequestDto;
 import com.example.postService.dto.user.request.CreateUserRequestDto;
@@ -8,16 +8,17 @@ import com.example.postService.dto.user.response.CreateUserResponseDto;
 import com.example.postService.dto.user.response.GetUserResponseDto;
 import com.example.postService.entity.user.User;
 import com.example.postService.entity.user.UserProfile;
-import com.example.postService.mapper.UserMapper;
-import com.example.postService.repository.UserJpaRepository;
-import com.example.postService.repository.UserProfileJpaRepository;
-import com.example.postService.service.UserService;
+import com.example.postService.mapper.user.UserMapper;
+import com.example.postService.repository.user.UserJpaRepository;
+import com.example.postService.repository.user.UserProfileJpaRepository;
+import com.example.postService.service.user.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -118,6 +119,17 @@ public class UserServiceImpl implements UserService {
 
         return ResponseEntity.ok("비밀번호 변경 성공");
 
+
+    }
+
+    @Override
+    public ResponseEntity<String> softDelete(Long userId){
+        Optional<User> userOptional = userJpaRepository.findById(userId);
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        userOptional.get().updateDelete(true, LocalDateTime.now());
+        return ResponseEntity.ok("회원탈퇴 성공");
 
     }
 }

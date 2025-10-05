@@ -1,4 +1,4 @@
-package com.example.postService.service;
+package com.example.postService.service.user;
 
 import com.example.postService.dto.login.request.LoginRequestDto;
 import com.example.postService.dto.user.request.CreateUserRequestDto;
@@ -24,4 +24,6 @@ public interface UserService {
     ResponseEntity<String> updateProfile(UpdateUserProfileRequestDto dto, Long UserId);
 
     ResponseEntity<String> updatePassword(UpdateUserPasswordRequestDto dto, Long userId);
+
+    ResponseEntity<String> softDelete(Long userId);
 }
