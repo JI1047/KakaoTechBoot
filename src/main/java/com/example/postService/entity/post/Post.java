@@ -1,5 +1,6 @@
 package com.example.postService.entity.post;
 
+import com.example.postService.dto.post.resquest.UpdatePostRequestDto;
 import com.example.postService.entity.BaseTime;
 import com.example.postService.entity.user.UserProfile;
 import jakarta.persistence.*;
@@ -37,5 +38,12 @@ public class Post extends BaseTime {
 
 
     private String postImage;
+
+    public void updatePost(UpdatePostRequestDto dto) {
+        this.title = dto.getTitle();
+        this.text = dto.getText();
+        this.postImage = dto.getPostImage();
+
+    }
 
 }
