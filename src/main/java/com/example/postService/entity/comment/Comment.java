@@ -4,9 +4,11 @@ import com.example.postService.entity.BaseTime;
 import com.example.postService.entity.post.Post;
 import com.example.postService.entity.user.User;
 import jakarta.persistence.*;
+import lombok.Getter;
 
 @Entity
 @Table(name = "comment")
+@Getter
 public class Comment extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

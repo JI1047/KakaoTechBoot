@@ -1,10 +1,12 @@
 package com.example.postService.controller;
 
-import com.example.postService.dto.post.response.GetListPostResponseDto;
+import com.example.postService.dto.post.response.GetPostListResponseDto;
+import com.example.postService.dto.post.response.GetPostResponseDto;
 import com.example.postService.dto.post.resquest.CreatePostRequestDto;
 import com.example.postService.dto.post.resquest.UpdatePostRequestDto;
 import com.example.postService.entity.post.PostView;
 import com.example.postService.service.Post.PostService;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,13 +21,19 @@ public class PostController {
     private PostService postService;
 
     @GetMapping("/list")
-    public ResponseEntity<List<GetListPostResponseDto>> getAllPosts(@RequestParam int page, @RequestParam int size){
+    public ResponseEntity<List<GetPostListResponseDto>> getAllPosts(@RequestParam int page, @RequestParam int size){
         return postService.getPosts(page, size);
     }
 
+    @GetMapping("/{postId}")
+    public ResponseEntity<GetPostResponseDto> getPost(@PathVariable Long postId) {
+        return postService.getPost(postId);
+
+    }
 
     @PostMapping("/create")
     public ResponseEntity<String> createPost(@RequestBody CreatePostRequestDto dto) {
+
         return postService.CreatePost(dto);
     }
 
