@@ -1,5 +1,6 @@
 package com.example.postService.controller;
 
+import com.example.postService.dto.post.response.GetListPostResponseDto;
 import com.example.postService.dto.post.resquest.CreatePostRequestDto;
 import com.example.postService.dto.post.resquest.UpdatePostRequestDto;
 import com.example.postService.entity.post.PostView;
@@ -8,12 +9,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/posts")
 public class PostController {
 
     @Autowired
     private PostService postService;
+
+    @GetMapping("/list")
+    public ResponseEntity<List<GetListPostResponseDto>> getAllPosts(@RequestParam int page, @RequestParam int size){
+        return postService.getPosts(page, size);
+    }
 
 
     @PostMapping("/create")

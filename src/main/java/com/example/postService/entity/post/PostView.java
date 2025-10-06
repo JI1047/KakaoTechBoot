@@ -1,9 +1,11 @@
 package com.example.postService.entity.post;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 @Entity
 @Table(name = "post_view")
+@Getter
 public class PostView {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)//데이터베이스의 자동 증가 컬럼을 위해 IDENTITY방법 사용

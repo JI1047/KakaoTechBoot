@@ -26,6 +26,10 @@ public class Post extends BaseTime {
     @JoinColumn(name = "post_id")
     private PostView post;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "post_id")
+    private PostContent postContent;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserProfile user;
@@ -33,17 +37,10 @@ public class Post extends BaseTime {
     @Column(nullable = false, length = 26)
     private String title;
 
-    @Column(nullable = false)
-    private String text;
 
-
-    private String postImage;
 
     public void updatePost(UpdatePostRequestDto dto) {
         this.title = dto.getTitle();
-        this.text = dto.getText();
-        this.postImage = dto.getPostImage();
-
     }
 
 }

@@ -1,10 +1,13 @@
 package com.example.postService.service.Post;
 
+import com.example.postService.dto.post.response.GetListPostResponseDto;
 import com.example.postService.dto.post.resquest.CreatePostRequestDto;
 import com.example.postService.dto.post.resquest.UpdatePostRequestDto;
 import com.example.postService.entity.post.PostView;
 import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 public interface PostService {
     @Transactional
@@ -15,4 +18,6 @@ public interface PostService {
 
     @Transactional
     ResponseEntity<String> DeletePost(Long postId);
+
+    ResponseEntity<List<GetListPostResponseDto>> getPosts(int page, int size);
 }

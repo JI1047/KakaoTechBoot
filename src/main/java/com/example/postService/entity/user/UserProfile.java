@@ -6,6 +6,7 @@ import lombok.*;
 @Entity
 @Table(name = "user_profile")
 @AllArgsConstructor // 모든 필드를 받는 생성자 자동 생성
+@NoArgsConstructor
 @Getter
 @Builder
 public class UserProfile {
@@ -19,9 +20,6 @@ public class UserProfile {
 
 
     private String profileImage;//사용자 프로필 이미지
-
-
-    protected UserProfile() {}
 
     public void updateProfile(String nickname, String profileImage) {
         this.nickname = nickname;
