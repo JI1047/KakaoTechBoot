@@ -7,7 +7,9 @@ import com.example.postService.dto.user.request.CreateUserRequestDto;
 import com.example.postService.dto.user.request.UpdateUserProfileRequestDto;
 import com.example.postService.dto.user.response.CreateUserResponseDto;
 import com.example.postService.dto.user.response.GetUserResponseDto;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +22,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<CreateUserResponseDto> signUpUser(@RequestBody CreateUserRequestDto dto) {
+    public ResponseEntity<CreateUserResponseDto> signUpUser(@Valid @RequestBody CreateUserRequestDto dto) {
         CreateUserResponseDto createUserResponseDto = userService.signUp(dto);
         return ResponseEntity.ok(createUserResponseDto);
     }

@@ -30,9 +30,11 @@ public class UserServiceImpl implements UserService {
     private final UserProfileJpaRepository userProfileJpaRepository;
     private final PasswordEncoderUtil passwordEncoderUtil;
 
-    //회원가입을 처리하는 service
-    @Transactional
+    /*
+        회원가입
+     */
     @Override
+    @Transactional
     public CreateUserResponseDto signUp(CreateUserRequestDto dto) {
         // 이메일 중복 체크
         Optional<User> userOptional = userJpaRepository.findByEmail(dto.getEmail());
@@ -42,16 +44,20 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
         }
 
-        // 비밀번호 암호화(bcrypt 방식 사용을 위해 Spring Security방식을 간단히 사용
         String encodedPassword = passwordEncoderUtil.encode(dto.getPassword());
 
+        UserProfile userProfile = userMapper.dtoToUserProfile(dto);
 
-        UserProfile UserProfile = userMapper.toUserProfile(dto);
-        User User = userMapper.toUser(dto, UserProfile,encodedPassword);
+        CreateUserRequestDto createUserRequestDto = CreateUserRequestDto.builder()
+                .email(dto.getEmail())
+                .password(encodedPassword)
+                .build();
+
+        User User = userMapper.dtoToUser(createUserRequestDto, userProfile);
 
         userJpaRepository.save(User);
 
-        return userMapper.toSignupResponseDto(User);
+        return userMapper.dtoToSignupResponseDto(User);
 
     }
 
@@ -60,14 +66,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<String> UserLogin(LoginRequestDto dto) {
 
-        User User = userJpaRepository.findByEmail(dto.getEmail())
+        User user = userJpaRepository.findByEmail(dto.getEmail())
                 .orElse(null);
 
-        if (User == null) {
+        if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("해당 이메일의 유저가 없습니다.");
         }
-        if(!User.getPassword().equals(dto.getPassword())) {
+        if(!passwordEncoderUtil.matches(dto.getPassword(), user.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body("비밀번호가 틀렸습니다.");
         }
@@ -85,7 +91,7 @@ public class UserServiceImpl implements UserService {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(userMapper.toUserResponseDto(User));
+        return ResponseEntity.ok(userMapper.dtoToUserResponseDto(User));
     }
 
     //닉네임,프로필 이미지 수정 Service 로직

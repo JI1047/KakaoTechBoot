@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class UserMapper {
 
     //회원가입시 받은 CreateUserRequestDto을 UserProfile로 변환
-    public UserProfile toUserProfile(CreateUserRequestDto dto) {
+    public UserProfile dtoToUserProfile(CreateUserRequestDto dto) {
         return UserProfile.builder()
                 .nickname(dto.getNickname())
                 .profileImage(dto.getProfileImage())
@@ -19,17 +19,17 @@ public class UserMapper {
     }
 
     //reateUserRequestDto와 UserProfile을 통해 User로 변환
-    public User toUser(CreateUserRequestDto dto, UserProfile userProfile, String encodedPassword) {
+    public User dtoToUser(CreateUserRequestDto dto, UserProfile userProfile) {
         return User.builder()
                 .userProfile(userProfile)
                 .email(dto.getEmail())
-                .password(encodedPassword)
+                .password(dto.getPassword())
                 .isDeleted(false)
                 .build();
     }
 
     //회원가입 완료 후 클라이언트에 반환할 응답 dto로 변환
-    public CreateUserResponseDto toSignupResponseDto(User user) {
+    public CreateUserResponseDto dtoToSignupResponseDto(User user) {
         return CreateUserResponseDto.builder()
                 .nickname(user.getUserProfile().getNickname())
                 .profileImage(user.getUserProfile().getProfileImage())
@@ -38,7 +38,7 @@ public class UserMapper {
     }
 
     //회원정보 조회 이후 클라이언트에 반환할 응답 dto로 변환
-    public GetUserResponseDto toUserResponseDto(User user) {
+    public GetUserResponseDto dtoToUserResponseDto(User user) {
         return GetUserResponseDto.builder()
                 .email(user.getEmail())
                 .nickname(user.getUserProfile().getNickname())
