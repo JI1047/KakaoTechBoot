@@ -11,11 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class UpdateUserPasswordRequestDto {
+    //비밀번호 업데이트시 클라이언트에서 서버로 요청에 사용되는 dto
+    private String newPassword;//새 비밀번호
 
-    @Description("넌 미쳤어")
-    private String newPassword;
-
-    private String confirmPassword;
+    private String confirmPassword;//새 비밀번호 확인
 
 
 }

@@ -11,11 +11,12 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CreateUserResponseDto {
 
-    private String email;
+    //회원가입 후 서버가 클라이언트에 반환해주는 dto
+    private String email;//사용자 이메일
 
-    private String nickname;
+    private String nickname;//사용자 닉네임
 
-    private String profileImage;
+    private String profileImage;//사용자 프로필 이미지
 
 
 }

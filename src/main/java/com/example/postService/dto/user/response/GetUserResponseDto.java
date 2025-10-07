@@ -12,7 +12,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class GetUserResponseDto {
-    private String email;
+    //회원 조회시 서버에서 클라이언트로 반환되는 dto
+
+    private String email;//사용자 이메일
 
 
     private String nickname; //사용자 닉네임
@@ -20,8 +22,8 @@ public class GetUserResponseDto {
 
     private String profileImage;//사용자 프로필 이미지
 
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt;//사용자 생성 일자
 
-    private LocalDateTime updatedAt;
+    private LocalDateTime updatedAt;//사용자 최종 수정 일자
 
 }

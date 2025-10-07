@@ -12,6 +12,7 @@ import com.example.postService.mapper.user.UserMapper;
 import com.example.postService.repository.user.UserJpaRepository;
 import com.example.postService.repository.user.UserProfileJpaRepository;
 import com.example.postService.service.user.UserService;
+import com.example.postService.util.PasswordEncoderUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,11 +23,12 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor//private final 로 선언된 객체들의 생성자들을 자동으로 생성해줌
 public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final UserJpaRepository userJpaRepository;
     private final UserProfileJpaRepository userProfileJpaRepository;
+    private final PasswordEncoderUtil passwordEncoderUtil;
 
     //회원가입을 처리하는 service
     @Transactional
@@ -35,16 +37,17 @@ public class UserServiceImpl implements UserService {
         // 이메일 중복 체크
         Optional<User> userOptional = userJpaRepository.findByEmail(dto.getEmail());
 
+        //이메일 중복 시 예외 처리
         if (userOptional.isPresent()) {
             throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
         }
 
-        // 비밀번호 암호화
-//        String encodedPassword = passwordEncoder.encode(dto.getPassword());
+        // 비밀번호 암호화(bcrypt 방식 사용을 위해 Spring Security방식을 간단히 사용
+        String encodedPassword = passwordEncoderUtil.encode(dto.getPassword());
 
 
         UserProfile UserProfile = userMapper.toUserProfile(dto);
-        User User = userMapper.toUser(dto, UserProfile);
+        User User = userMapper.toUser(dto, UserProfile,encodedPassword);
 
         userJpaRepository.save(User);
 
