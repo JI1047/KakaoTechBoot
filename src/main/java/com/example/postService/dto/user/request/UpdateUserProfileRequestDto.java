@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UpdateUserProfileRequestDto {
 
+    // TODO: 프로필 사진을 바꾸려면 닉네임도 바꿔야되나? ㅋ -> dto 분리하면 해결됨
     @NotBlank(message = "닉네임은 필수 입력입니다.")//null+공백문자포함 금지
     @Size(min = 1 , max = 10)//닉네임은 1자 이상 10자 이하
     private String nickname; //사용자 닉네임

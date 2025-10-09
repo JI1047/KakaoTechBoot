@@ -7,39 +7,40 @@ import com.example.postService.dto.user.request.CreateUserRequestDto;
 import com.example.postService.dto.user.request.UpdateUserProfileRequestDto;
 import com.example.postService.dto.user.response.CreateUserResponseDto;
 import com.example.postService.dto.user.response.GetUserResponseDto;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/members")
+@RequestMapping("/api/users")
+@RequiredArgsConstructor
 public class UserController {
+    private final UserService userService;
 
-
-    @Autowired
-    private UserService userService;
-
-    @PostMapping("/signup")
-    public ResponseEntity<CreateUserResponseDto> signUpUser(@Valid @RequestBody CreateUserRequestDto dto) {
-        CreateUserResponseDto createUserResponseDto = userService.signUp(dto);
-        return ResponseEntity.ok(createUserResponseDto);
+    @PostMapping("/sign-up")
+    public ResponseEntity<CreateUserResponseDto> signUp(@Valid @RequestBody CreateUserRequestDto dto) {
+        return ResponseEntity.ok(userService.signUp(dto));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody LoginRequestDto dto) {
+    public ResponseEntity<String> login(@RequestBody LoginRequestDto dto, HttpServletRequest httpServletRequest) {
 
-        return userService.UserLogin(dto);
+        return userService.login(dto, httpServletRequest);
 
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<GetUserResponseDto> getUser(@PathVariable Long userId) {
-        return userService.getUser(userId);
+    public ResponseEntity<GetUserResponseDto> get(@PathVariable Long userId) {
+        return userService.get(userId);
 
     }
 
+    // TODO : http method 는 get post put delete 만 쓴다
     @PatchMapping("/{userId}/profile")
     public ResponseEntity<String> updateProfile(@RequestBody UpdateUserProfileRequestDto dto, @PathVariable Long userId) {
 
@@ -51,8 +52,29 @@ public class UserController {
         return userService.updatePassword(dto, userId);
     }
 
-    @PatchMapping("/{userId}/delete")
-    public ResponseEntity<String> softDelete(@PathVariable Long userId) {
+
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<String> delete(@PathVariable Long userId) {
         return userService.softDelete(userId);
     }
+
+    // TODO : log out은 "사용자를 삭제하려는 행위" 가 아니다
+    @PutMapping("/log-out")
+    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate(); // 서버 세션 무효화
+        }
+
+        Cookie cookie = new Cookie("JSESSIONID", null);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
+        //클라이언트에 저장된 JSESSIONID쿠키 삭제
+        return ResponseEntity.ok("Logout successful, session & cookie removed");
+    }
+
+
 }

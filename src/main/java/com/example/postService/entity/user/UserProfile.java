@@ -12,13 +12,13 @@ import lombok.*;
 public class UserProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)//데이터베이스의 자동 증가 컬럼을 위해 IDENTITY방법 사용
-    @Column(name = "user_id")//db에는 user_id로 저장됨
+    @Column(name = "id")//db에는 user_id로 저장됨
     private Long id;
 
     @Column(nullable = false, unique = true,length = 10)//NOT NULL,무결성(중복 x)설정,길이 조건 설정
     private String nickname; //사용자 닉네임
 
-
+    @Column
     private String profileImage;//사용자 프로필 이미지
 
     //닉에임,프로필이미지 업데이트시 사용될 메서드

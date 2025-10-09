@@ -42,6 +42,7 @@ public class Post extends BaseTime {
     private String title;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default//Builder로 객체 생성시 null이 될 수도있다.
     private List<Comment> comments = new ArrayList<>();
 
 

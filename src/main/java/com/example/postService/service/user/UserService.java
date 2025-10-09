@@ -6,6 +6,7 @@ import com.example.postService.dto.user.request.UpdateUserPasswordRequestDto;
 import com.example.postService.dto.user.request.UpdateUserProfileRequestDto;
 import com.example.postService.dto.user.response.CreateUserResponseDto;
 import com.example.postService.dto.user.response.GetUserResponseDto;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 
@@ -15,10 +16,10 @@ public interface UserService {
     CreateUserResponseDto signUp(CreateUserRequestDto dto);
 
     //로그인 처리 Service 로직
-    ResponseEntity<String> UserLogin(LoginRequestDto dto);
+    ResponseEntity<String> login(LoginRequestDto dto, HttpServletRequest request);
 
     //회원 정보 조회 Service 로직
-    ResponseEntity<GetUserResponseDto> getUser(Long UserId);
+    ResponseEntity<GetUserResponseDto> get(Long UserId);
 
     //닉네임,프로필 이미지 수정 Service 로직
     ResponseEntity<String> updateProfile(UpdateUserProfileRequestDto dto, Long UserId);

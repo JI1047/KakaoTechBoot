@@ -17,14 +17,14 @@ import java.time.LocalDateTime;
 public class User extends BaseTime {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)//데이터베이스의 자동 증가 컬럼을 위해 IDENTITY방법 사용
+    @Column
     private Long userId;//UserProfile과 식별자를 공유하는 PK(기본 키)
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     //OneToOne으로 설정된 UserProfile객체를 지연로딩을 통해서 불필요한 sql 쿼리를 줄이고
     // cascade을 ALL로 설정해 User 삭제시 UserProfile도 동시에 삭제 되도록 설정
-    @MapsId
-    //User과 UserProfile이 같은 식별자(PK)를 공유하도록 MapsId어노테이션 사용
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_profile_id")
     private UserProfile userProfile;
 
     @Column(nullable = false, unique = true, length = 150)//NOT NULL,무결성(중복 x)설정,길이 조건 설정
@@ -41,19 +41,19 @@ public class User extends BaseTime {
     private LocalDateTime deletedAt;
 
     @Column(nullable = false)
+    @Builder.Default//Builder로 객체 생성시 null로 생성될 수 있음
     private Boolean isDeleted = false;//boolean형은 기본 default값이 false이기 때문에 설정 x
-
 
 
     //패스워드 업데이트 메서드
     public void updatePassword(String password) {
-        this.confirmPassword = password;
+        this.password = password;
     }
 
     //Soft_delete 업데이트 메서드
-    public void updateDelete(Boolean isDeleted, LocalDateTime deletedAt) {
-        this.isDeleted = isDeleted;
-        this.deletedAt = deletedAt;
+    public void updateDeleted() {
+        this.isDeleted = true;
+        this.deletedAt = LocalDateTime.now();
     }
 
 
