@@ -4,9 +4,8 @@ import com.example.postService.dto.post.response.GetPostListResponseDto;
 import com.example.postService.dto.post.response.GetPostResponseDto;
 import com.example.postService.dto.post.resquest.CreatePostRequestDto;
 import com.example.postService.dto.post.resquest.UpdatePostRequestDto;
-import com.example.postService.entity.post.PostView;
-import com.example.postService.service.Post.PostService;
-import lombok.Getter;
+import com.example.postService.service.post.PostService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,14 +31,14 @@ public class PostController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createPost(@RequestBody CreatePostRequestDto dto) {
+    public ResponseEntity<String> createPost(@RequestBody CreatePostRequestDto dto, HttpServletRequest httpServletRequest) {
 
-        return postService.CreatePost(dto);
+        return postService.createPost(dto, httpServletRequest);
     }
 
     @PatchMapping("/{postId}/update")
     public ResponseEntity<String> updatePost(@RequestBody UpdatePostRequestDto dto, @PathVariable Long postId) {
-        return postService.UpdatePost(dto, postId);
+        return postService.updatePost(dto, postId);
     }
 
     @DeleteMapping("/{postId}/delete")

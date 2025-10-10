@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class SessionUser { //TODO: 네이밍 컨벤션 적용 안됨
-    private Long userId;
+    private Long userProfileId;
 
     private String nickname;
 

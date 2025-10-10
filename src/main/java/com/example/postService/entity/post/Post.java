@@ -23,20 +23,20 @@ import java.util.List;
 @Builder
 public class Post extends BaseTime {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @MapsId
-    @JoinColumn(name = "post_id")
-    private PostView post;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)//좋아요,조회,댓글 수 엔터티 외래 키로 선언
+    @JoinColumn(name = "post_view_id")
+    private PostView postView;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "post_id")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)//내용,사진 엔터티 외래 키로 선언
+    @JoinColumn(name = "post_content_id")
     private PostContent postContent;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private UserProfile user;
+    @JoinColumn(name = "user_id")//사용자와 ManyToOne 매핑 외래 키 선언
+    private UserProfile userProfile;
 
     @Column(nullable = false, length = 26)
     private String title;
@@ -49,6 +49,6 @@ public class Post extends BaseTime {
 
     public void updatePost(UpdatePostRequestDto dto) {
         this.title = dto.getTitle();
-    }
+    }//제목 업데이트 메서드
 
 }

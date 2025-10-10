@@ -1,6 +1,6 @@
 package com.example.postService.dto.post.response;
 
-import com.example.postService.dto.comment.GetCommentResponseDto;
+import com.example.postService.dto.comment.response.GetCommentResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

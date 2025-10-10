@@ -72,24 +72,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<String> login(LoginRequestDto dto, HttpServletRequest request) {
 
-        //Optional 안할거면 왜 Optional 반환?
         //입력받은 email을 DB에서 조회
-        User user = userJpaRepository.findByEmail(dto.getEmail())
-                .orElse(null);
+        Optional<User> userOptional = userJpaRepository.findByEmail(dto.getEmail());
 
         //해당하는 email의 user가 없을 시 예외 처리
-        if (user == null) {
+        if (userOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("해당 이메일의 유저가 없습니다.");
         }//passwordEncoderUtil에서 생성해놓은 matches메서드를 통해 입력 password와 암호화된 password를 비교
 
+        User user = userOptional.get();
         if (!PasswordEncoderUtil.matches(dto.getPassword(), user.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body("비밀번호가 틀렸습니다.");
         }
 
+        UserProfile userProfile = user.getUserProfile();
+
         //세션에 저장할 정보 dto 변환
-        SessionUser sessionUser = userMapper.userToSessionUser(user);
+        SessionUser sessionUser = userMapper.userProfileToSessionUser(userProfile);
 
         //세션 생성
         HttpSession httpSession = request.getSession();
@@ -104,13 +105,14 @@ public class UserServiceImpl implements UserService {
     //회원 정보 조회 Service 로직
     @Override
     public ResponseEntity<GetUserResponseDto> get(Long userId) {
-        User user = userJpaRepository.findById(userId).orElse(null);//PathVariable로 부터 온 userId를 통해 DB에서 User조회
+        Optional<User> userOptional = userJpaRepository.findById(userId);//PathVariable로 부터 온 userId를 통해 DB에서 User조회
         //Optional 안할거면 왜 Optional 반환?
 
-        if (user == null) {
+        if (userOptional.isEmpty()) {
             return ResponseEntity.notFound().build();
         }//해당 user없을시 예외 처리
 
+        User user = userOptional.get();
         //Mapper을 통해 응답 dto 변환 후 반환
         return ResponseEntity.ok(userMapper.userToUGetUserResponseDto(user));
     }

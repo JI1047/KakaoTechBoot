@@ -25,7 +25,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(loginCheckInterceptor)
                 .addPathPatterns("/api/**")//모든 api가 세션 필요로 설정
                 .excludePathPatterns("/api/users/login",
-                        "/api/users/signup",
+                        "/api/users/sign-up",
                         "/api/posts/list",
                         "/api/posts/{postId}"
                 );//로그인,회원가입,게시물 목록 조회, 게시물 상세 조회는 세션 없이 진행되도록 예외 처리

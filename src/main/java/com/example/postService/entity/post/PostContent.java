@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class PostContent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "post_id")
+    @Column(name = "post_content_id")
     private Long id;
 
     @Column(nullable = false)
@@ -25,7 +25,7 @@ public class PostContent {
 
     private String postImage;
 
-    public void updatePostContent(UpdatePostRequestDto updatePostRequestDto) {
+    public void updatePostContent(UpdatePostRequestDto updatePostRequestDto) {//내용 및 이미지 업데이트 메서드
         this.text = updatePostRequestDto.getText();
         this.postImage = updatePostRequestDto.getPostImage();
     }

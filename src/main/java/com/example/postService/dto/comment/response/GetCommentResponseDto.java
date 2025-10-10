@@ -1,4 +1,4 @@
-package com.example.postService.dto.comment;
+package com.example.postService.dto.comment.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
