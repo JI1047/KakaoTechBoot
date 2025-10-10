@@ -14,4 +14,7 @@ public interface CommentService {
     //댓글 수정 로직
     @Transactional
     ResponseEntity<String> updateComment(Long postId, Long commentId, UpdateCommentDto dto, HttpServletRequest httpServletRequest);
+
+    @Transactional
+    ResponseEntity<String> deleteComment(Long postId, Long commentId, HttpServletRequest httpServletRequest);
 }

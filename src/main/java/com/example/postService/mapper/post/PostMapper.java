@@ -6,6 +6,7 @@ import com.example.postService.dto.post.response.GetPostResponseDto;
 import com.example.postService.dto.post.resquest.CreatePostRequestDto;
 import com.example.postService.entity.post.Post;
 import com.example.postService.entity.post.PostContent;
+import com.example.postService.entity.post.PostLike;
 import com.example.postService.entity.post.PostView;
 import com.example.postService.entity.user.UserProfile;
 import org.mapstruct.Mapper;
@@ -27,4 +28,10 @@ public interface PostMapper {
     GetPostListResponseDto toGetPostListResponseDto(Post post, PostView postView, UserProfile userProfile);
 
     GetPostResponseDto toGetPostResponseDto(Post post, PostContent postContent, PostView postView, UserProfile userProfile, List<GetCommentResponseDto> responseDtoList);
+
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(source = "post", target = "post")
+    @Mapping(source = "userProfile", target = "userProfile")
+    PostLike toPostLike(Post post, UserProfile userProfile);
 }

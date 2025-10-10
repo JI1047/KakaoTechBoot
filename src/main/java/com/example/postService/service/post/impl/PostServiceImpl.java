@@ -9,11 +9,13 @@ import com.example.postService.dto.user.session.SessionUser;
 import com.example.postService.entity.comment.Comment;
 import com.example.postService.entity.post.Post;
 import com.example.postService.entity.post.PostContent;
+import com.example.postService.entity.post.PostLike;
 import com.example.postService.entity.post.PostView;
 import com.example.postService.entity.user.UserProfile;
 import com.example.postService.mapper.comment.CommentMapper;
 import com.example.postService.mapper.post.PostMapper;
 import com.example.postService.repository.post.PostJpaRepository;
+import com.example.postService.repository.post.PostLikeJpaRepository;
 import com.example.postService.repository.post.PostViewJpaRepository;
 import com.example.postService.repository.user.UserProfileJpaRepository;
 import com.example.postService.service.post.PostService;
@@ -39,6 +41,7 @@ public class PostServiceImpl implements PostService {
     private final PostJpaRepository postJpaRepository;
     private final PostViewJpaRepository postViewJpaRepository;
     private final UserProfileJpaRepository userProfileJpaRepository;
+    private final PostLikeJpaRepository postLikeJpaRepository;
 
 
     //게시물 생성 로직
@@ -71,7 +74,7 @@ public class PostServiceImpl implements PostService {
         PostContent postContent = postMapper.postContentDtoToPostContent(createPostRequestDto);
 
         //Mapper을 통해 게시물 객체 생성
-        Post post = postMapper.toPost(createPostRequestDto,postView,userProfile,postContent);
+        Post post = postMapper.toPost(createPostRequestDto, postView, userProfile, postContent);
 
 
         //게시물 저장
@@ -104,7 +107,7 @@ public class PostServiceImpl implements PostService {
 
     @Transactional
     @Override
-    public ResponseEntity<String> DeletePost(Long postId) {
+    public ResponseEntity<String> deletePost(Long postId) {
         Optional<Post> postOptional = postJpaRepository.findById(postId);
         if (postOptional.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -122,13 +125,13 @@ public class PostServiceImpl implements PostService {
 
         List<Post> posts = postJpaRepository.findListPostQueryDSL(pageRequest);
 
-        List<GetPostListResponseDto> responseDtoList =new ArrayList<>();
+        List<GetPostListResponseDto> responseDtoList = new ArrayList<>();
         for (Post post : posts) {
             PostView postView = post.getPostView();
             UserProfile userProfile = post.getUserProfile();
 
             GetPostListResponseDto getListPostResponseDto =
-                    postMapper.toGetPostListResponseDto(post,postView,userProfile);
+                    postMapper.toGetPostListResponseDto(post, postView, userProfile);
             responseDtoList.add(getListPostResponseDto);
 
         }
@@ -146,10 +149,10 @@ public class PostServiceImpl implements PostService {
         PostContent postContent = post.getPostContent();
         PostView postView = post.getPostView();
         UserProfile userProfile = post.getUserProfile();
-        List<Comment> comments =post.getComments();
-        List<GetCommentResponseDto> responseDtoList =new ArrayList<>();
+        List<Comment> comments = post.getComments();
+        List<GetCommentResponseDto> responseDtoList = new ArrayList<>();
         for (Comment comment : comments) {
-            GetCommentResponseDto dto = commentMapper.getCommentResponseDto(comment,userProfile);
+            GetCommentResponseDto dto = commentMapper.getCommentResponseDto(comment, userProfile);
             responseDtoList.add(dto);
         }
 
@@ -158,6 +161,44 @@ public class PostServiceImpl implements PostService {
 
     }
 
+    @Transactional
+    @Override
+    public ResponseEntity<String> updatePostLike(Long postId, HttpServletRequest httpServletRequest) {
+        HttpSession httpSession = httpServletRequest.getSession(false);
 
+        if (httpSession == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+        }
 
+        SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
+        if (sessionUser == null || sessionUser.getUserProfileId() == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("세션 정보가 유효하지 않습니다.");
+        }
+
+        Optional<UserProfile> userProfileOptional = userProfileJpaRepository.findById(sessionUser.getUserProfileId());
+        if (userProfileOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body("해당 사용자 정보를 찾을 수 없습니다.");
+        }
+        Optional<Post> postOptional = postJpaRepository.findById(postId);
+        if (postOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body("해당 게시물을 찾을 수 없습니다.");
+        }
+        Post post = postOptional.get();
+        UserProfile userProfile = userProfileOptional.get();
+
+        boolean alreadyLiked = postLikeJpaRepository.existsByPostAndUserProfile(post, userProfile);
+
+        if (alreadyLiked) {
+            // 좋아요 취소
+            postLikeJpaRepository.deleteByPostAndUserProfile(post, userProfile);
+            post.getPostView().likeCountDecrease();
+            return ResponseEntity.ok("좋아요 제거");
+        } else {
+            // 좋아요 추가
+            PostLike postLikeEntity = postMapper.toPostLike(post, userProfile);
+            postLikeJpaRepository.save(postLikeEntity);
+            post.getPostView().likeCountIncrease();
+            return ResponseEntity.ok("좋아요 생성");
+        }
+    }
 }

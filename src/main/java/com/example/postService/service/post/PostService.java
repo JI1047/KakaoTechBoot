@@ -18,9 +18,12 @@ public interface PostService {
     ResponseEntity<String> updatePost(UpdatePostRequestDto dto, Long postId);
 
     @Transactional
-    ResponseEntity<String> DeletePost(Long postId);
+    ResponseEntity<String> deletePost(Long postId);
 
     ResponseEntity<List<GetPostListResponseDto>> getPosts(int page, int size);
 
     ResponseEntity<GetPostResponseDto> getPost(Long postId);
+
+    @Transactional
+    ResponseEntity<String> updatePostLike(Long postId, HttpServletRequest httpServletRequest);
 }

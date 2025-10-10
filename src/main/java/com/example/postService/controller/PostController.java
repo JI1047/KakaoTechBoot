@@ -20,7 +20,7 @@ public class PostController {
     private PostService postService;
 
     @GetMapping("/list")
-    public ResponseEntity<List<GetPostListResponseDto>> getAllPosts(@RequestParam int page, @RequestParam int size){
+    public ResponseEntity<List<GetPostListResponseDto>> getAllPosts(@RequestParam int page, @RequestParam int size) {
         return postService.getPosts(page, size);
     }
 
@@ -43,6 +43,12 @@ public class PostController {
 
     @DeleteMapping("/{postId}/delete")
     public ResponseEntity<String> deletePost(@PathVariable Long postId) {
-        return postService.DeletePost(postId);
+        return postService.deletePost(postId);
+    }
+
+
+    @PostMapping("/{postId}/like")
+    public ResponseEntity<String> likePost(@PathVariable Long postId,HttpServletRequest httpServletRequest) {
+        return postService.updatePostLike(postId,httpServletRequest);
     }
 }

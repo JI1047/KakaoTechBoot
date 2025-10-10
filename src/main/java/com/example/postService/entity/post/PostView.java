@@ -31,5 +31,21 @@ public class PostView {
     @Builder.Default//Builder로 객체 생성시 null로 생성될 수 있음
     private Integer lookCount=0;//조회 수
 
+    public void likeCountIncrease() {
+        likeCount+=1;
+    }
+    public void likeCountDecrease() {
+        likeCount-=1;
+    }
+    public void commentCountIncrease() {
+        commentCount+=1;
+    }
+    public void commentCountDecrease() {
+        commentCount-=1;
+    }
+    public void lookCountUpdate() {
+        lookCount+=1;
+    }
+
 
 }
