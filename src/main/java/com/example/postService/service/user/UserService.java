@@ -27,4 +27,7 @@ public interface UserService {
     ResponseEntity<String> updatePassword(UpdateUserPasswordRequestDto dto, Long userId);
 
     ResponseEntity<String> softDelete(Long userId);
+
+    @Transactional
+    ResponseEntity<String> hardDelete(Long userId);
 }

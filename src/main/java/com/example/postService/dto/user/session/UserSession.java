@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SessionUser { //TODO: 네이밍 컨벤션 적용 안됨
+public class UserSession { //TODO: 네이밍 컨벤션 적용 안됨
     private Long userProfileId;
 
     private String nickname;

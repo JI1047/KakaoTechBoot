@@ -2,7 +2,7 @@ package com.example.postService.service.comment.impl;
 
 import com.example.postService.dto.comment.request.CreateCommentDto;
 import com.example.postService.dto.comment.request.UpdateCommentDto;
-import com.example.postService.dto.user.session.SessionUser;
+import com.example.postService.dto.user.session.UserSession;
 import com.example.postService.entity.comment.Comment;
 import com.example.postService.entity.post.Post;
 import com.example.postService.entity.user.UserProfile;
@@ -45,12 +45,12 @@ public class CommentServiceImpl implements CommentService {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
         }
 
-        SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
-        if (sessionUser == null || sessionUser.getUserProfileId() == null) {
+        UserSession userSession = (UserSession) httpSession.getAttribute("user");
+        if (userSession == null || userSession.getUserProfileId() == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("세션 정보가 유효하지 않습니다.");
         }
 
-        Optional<UserProfile> userProfileOptional = userProfileJpaRepository.findById(sessionUser.getUserProfileId());
+        Optional<UserProfile> userProfileOptional = userProfileJpaRepository.findById(userSession.getUserProfileId());
         if (userProfileOptional.isEmpty()) {
             return ResponseEntity.badRequest().body("해당 사용자 정보를 찾을 수 없습니다.");
         }
@@ -82,12 +82,12 @@ public class CommentServiceImpl implements CommentService {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
         }
 
-        SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
-        if (sessionUser == null || sessionUser.getUserProfileId() == null) {
+        UserSession userSession = (UserSession) httpSession.getAttribute("user");
+        if (userSession == null || userSession.getUserProfileId() == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("세션 정보가 유효하지 않습니다.");
         }
 
-        Optional<UserProfile> userProfileOptional = userProfileJpaRepository.findById(sessionUser.getUserProfileId());
+        Optional<UserProfile> userProfileOptional = userProfileJpaRepository.findById(userSession.getUserProfileId());
         if (userProfileOptional.isEmpty()) {
             return ResponseEntity.badRequest().body("해당 사용자 정보를 찾을 수 없습니다.");
         }
@@ -119,12 +119,12 @@ public class CommentServiceImpl implements CommentService {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
         }
 
-        SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
-        if (sessionUser == null || sessionUser.getUserProfileId() == null) {
+        UserSession userSession = (UserSession) httpSession.getAttribute("user");
+        if (userSession == null || userSession.getUserProfileId() == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("세션 정보가 유효하지 않습니다.");
         }
 
-        Optional<UserProfile> userProfileOptional = userProfileJpaRepository.findById(sessionUser.getUserProfileId());
+        Optional<UserProfile> userProfileOptional = userProfileJpaRepository.findById(userSession.getUserProfileId());
         if (userProfileOptional.isEmpty()) {
             return ResponseEntity.badRequest().body("해당 사용자 정보를 찾을 수 없습니다.");
         }

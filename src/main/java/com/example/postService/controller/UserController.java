@@ -27,27 +27,32 @@ public class UserController {
         return ResponseEntity.ok(userService.signUp(dto));
     }
 
+    //로그인 controller
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequestDto dto, HttpServletRequest httpServletRequest) {
+        //로그인에 필요한 email,password를 dto를 통해 입력받고
+        //request 세션 생성을 위해 필요한 HttpServletRequest 객체
 
+        //userService.login로직을 통해 로그인 및 세션 설정 수행
         return userService.login(dto, httpServletRequest);
 
     }
 
+    //회원정보 controller
     @GetMapping("/{userId}")
     public ResponseEntity<GetUserResponseDto> get(@PathVariable Long userId) {
         return userService.get(userId);
 
     }
 
-    // TODO : http method 는 get post put delete 만 쓴다
-    @PatchMapping("/{userId}/profile")
+//   회원정보 수정(PUT)/nickname,profileImage 수정
+    @PutMapping("/{userId}/profile")
     public ResponseEntity<String> updateProfile(@RequestBody UpdateUserProfileRequestDto dto, @PathVariable Long userId) {
 
         return userService.updateProfile(dto, userId);
     }
 
-    @PatchMapping("/{userId}/password")
+    @PutMapping("/{userId}/password")
     public ResponseEntity<String> updatePassword(@RequestBody UpdateUserPasswordRequestDto dto, @PathVariable Long userId) {
         return userService.updatePassword(dto, userId);
     }
@@ -59,7 +64,12 @@ public class UserController {
         return userService.softDelete(userId);
     }
 
-    // TODO : log out은 "사용자를 삭제하려는 행위" 가 아니다
+    //회원정보 삭제
+    @DeleteMapping("/{userId}/hard-delete")
+    public ResponseEntity<String> hardDelete(@PathVariable Long userId) {
+        return userService.hardDelete(userId);
+    }
+
     @PutMapping("/log-out")
     public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession(false);

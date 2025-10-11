@@ -5,7 +5,7 @@ import com.example.postService.dto.post.response.GetPostListResponseDto;
 import com.example.postService.dto.post.response.GetPostResponseDto;
 import com.example.postService.dto.post.resquest.CreatePostRequestDto;
 import com.example.postService.dto.post.resquest.UpdatePostRequestDto;
-import com.example.postService.dto.user.session.SessionUser;
+import com.example.postService.dto.user.session.UserSession;
 import com.example.postService.entity.comment.Comment;
 import com.example.postService.entity.post.Post;
 import com.example.postService.entity.post.PostContent;
@@ -55,12 +55,12 @@ public class PostServiceImpl implements PostService {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
         }
 
-        SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
-        if (sessionUser == null || sessionUser.getUserProfileId() == null) {
+        UserSession userSession = (UserSession) httpSession.getAttribute("user");
+        if (userSession == null || userSession.getUserProfileId() == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("세션 정보가 유효하지 않습니다.");
         }
 
-        Optional<UserProfile> userProfileOptional = userProfileJpaRepository.findById(sessionUser.getUserProfileId());
+        Optional<UserProfile> userProfileOptional = userProfileJpaRepository.findById(userSession.getUserProfileId());
         if (userProfileOptional.isEmpty()) {
             return ResponseEntity.badRequest().body("해당 사용자 정보를 찾을 수 없습니다.");
         }
@@ -119,6 +119,24 @@ public class PostServiceImpl implements PostService {
         return ResponseEntity.ok("게시물 삭제 성공");
     }
 
+    /**게시물 목록 조회 로직
+     * 게시물 리스트를 page(시작점, 불러올 게시물 size)를 설정해놓고
+     *  jpa를 통해 findAll메서드를 호출해서 List 형태로 조회했습니다.
+     *  이후 조회,댓글,좋아요 수를 불러오기 위해 lazy로 설정된 postView,UserProfile도를
+     *  for문을 통해 불러온 list의 크기만큼 반복하여 조회했습니다.
+     *  그러자 List posts를 조회할 때 한번 그리고 List의 크기만큼 postView,UserProfile도를 조회하는
+     *  N+1문제를 마주쳣습니다.
+     *  queryDSL을 직접 작성하여 fetch join을 통해서 관련된 poseView의 엔터티들을
+     *  한번에 조회하여 쿼리문을 줄이는 설계를 통해 최적화를 진행했습니다.
+     *
+     *  1. 요청을 통해 포함된 page,size를 통해서 pageRequest 설정
+     *  2. pageRequest를 포함해 만든 queryDSL로 해당하는 List의 크기만큼 post조회
+     *  2-1. 관련 매핑 객체 postView,UserProfile도 한번에 조회
+     *  3. 게시물 목록 조회 응답 dto List 생성
+     *  3. for문을 통해 미리 불러온 posts에서 mapper를 통해 dto로 변경
+     *  4. 응답 dto List 반환
+     *
+     */
     @Override//게시물 목록 조회
     public ResponseEntity<List<GetPostListResponseDto>> getPosts(int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
@@ -170,12 +188,12 @@ public class PostServiceImpl implements PostService {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
         }
 
-        SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
-        if (sessionUser == null || sessionUser.getUserProfileId() == null) {
+        UserSession userSession = (UserSession) httpSession.getAttribute("user");
+        if (userSession == null || userSession.getUserProfileId() == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("세션 정보가 유효하지 않습니다.");
         }
 
-        Optional<UserProfile> userProfileOptional = userProfileJpaRepository.findById(sessionUser.getUserProfileId());
+        Optional<UserProfile> userProfileOptional = userProfileJpaRepository.findById(userSession.getUserProfileId());
         if (userProfileOptional.isEmpty()) {
             return ResponseEntity.badRequest().body("해당 사용자 정보를 찾을 수 없습니다.");
         }

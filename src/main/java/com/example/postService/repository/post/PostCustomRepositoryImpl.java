@@ -25,10 +25,10 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
     public List<Post> findListPostQueryDSL(Pageable pageable) {
         List<Post> posts = queryFactory
                 .selectFrom(post)
-                .join(post.userProfile, userProfile).fetchJoin()
-                .join(post.postView, postView).fetchJoin()
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .join(post.userProfile, userProfile).fetchJoin()//매핑 객체 fetch join 적용
+                .join(post.postView, postView).fetchJoin()//매핑 객체 fetch join 적용
+                .offset(pageable.getOffset())//pageable 매개변수 통해 offset설정
+                .limit(pageable.getPageSize())//pageable 매개변수 통해 limit설정
                 .fetch();
         return posts;
     }

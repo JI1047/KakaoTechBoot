@@ -33,8 +33,7 @@ public class Comment extends BaseTime {
     private Post post;
 
 
-//    @Version
-//    private Integer version;//낙관적 락 허용
+
 
     public void updateText(String text) {
         this.text = text;
